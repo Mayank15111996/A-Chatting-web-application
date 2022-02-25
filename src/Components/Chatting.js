@@ -16,22 +16,27 @@ const Chatting = ({
   const [listOfIds, setListOfIds] = useState([]);
   const [change, setChange] = useState(0);
 
-  useEffect(() => {
-    setChange(listOfIds.length);
-  }, [chats]);
+  // useEffect(() => {
+  //   setChange(listOfIds.length);
+  // }, [chats.length]);
 
   const handleClick = (id) => {
     if (document.getElementById(id).classList.contains("selected")) {
-      setChange(change - 1);
       setListOfIds(listOfIds.filter((currentId) => currentId !== id));
-      console.log(listOfIds.length);
+      setChange(change - 1);
+      console.log(change);
       document.getElementById(id).classList.remove("selected");
     } else {
-      setChange(change + 1);
-      console.log(listOfIds.length);
       setListOfIds([...listOfIds, id]);
+      setChange(change + 1);
+      console.log(change);
       document.getElementById(id).classList.add("selected");
     }
+  };
+
+  const handleClick2 = () => {
+    setChange(change - listOfIds.length);
+    handleDeleteOpen(listOfIds);
   };
 
   return (
@@ -40,7 +45,7 @@ const Chatting = ({
         yourName={yourName}
         setYourName={setYourName}
         change={change}
-        handleDeleteOpen={() => handleDeleteOpen(listOfIds)}
+        handleDeleteOpen={() => handleClick2()}
       />
       <div id="chat" className="chat-container">
         {chats

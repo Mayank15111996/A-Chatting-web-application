@@ -77,18 +77,31 @@ const App = () => {
     setDeleteId(listOfIds);
   };
 
+  const updateChats = (ids, chats) => {
+    let answer = [];
+    for (let i = 0; i < chats.length; i++) {
+      let found = false;
+      for (let j = 0; j < ids.length; j++) {
+        if (chats[i].id === ids[j]) {
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        answer.push(chats[i]);
+      }
+    }
+    return answer;
+  };
+
   const handleDelete = () => {
     if (!deleteId) return;
     deleteId.forEach((id) => {
       remove(ref(db, "chats/" + id));
     });
-    setChats(
-      chats.filter((val) => {
-        deleteId.find((id) => {
-          return id !== val;
-        });
-      })
-    );
+    setChats(updateChats(deleteId, chats));
+    console.log("Deleted!");
+    setDeleteId([]);
     setOpenDelete(false);
   };
 
@@ -128,7 +141,7 @@ const App = () => {
     .filter((val) => val.whoIsEntering === name)
     .map((val) => val.enteredName);
 
-  console.log(contactList);
+  // console.log(contactList);
 
   const handleName = (name) => {
     setYourName(name);

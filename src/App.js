@@ -100,7 +100,7 @@ const App = () => {
       remove(ref(db, "chats/" + id));
     });
     setChats(updateChats(deleteId, chats));
-    console.log("Deleted!");
+    console.log("Successfully Deleted!");
     setDeleteId([]);
     setOpenDelete(false);
   };
@@ -134,14 +134,12 @@ const App = () => {
     onChildAdded(nameListRef, (data) => {
       setNameList((nameList) => [...nameList, data.val()]);
     });
-    console.log("Hello");
+    console.log("Successfully added!");
   }, []);
 
   const contactList = nameList
     .filter((val) => val.whoIsEntering === name)
     .map((val) => val.enteredName);
-
-  // console.log(contactList);
 
   const handleName = (name) => {
     setYourName(name);

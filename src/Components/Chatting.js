@@ -11,7 +11,12 @@ const Chatting = ({
   sendMessage,
   message,
   setMessage,
+  handleDeleteOpen,
 }) => {
+  const handleClick = (id) => {
+    handleDeleteOpen(id);
+  };
+
   return (
     <>
       <NavBar yourName={yourName} setYourName={setYourName} />
@@ -22,11 +27,12 @@ const Chatting = ({
               (chat.name === name && chat.sentTo === yourName) ||
               (chat.name === yourName && chat.sentTo === name)
           )
-          .map((chat, index) => {
+          .map((chat) => {
             return (
               <div
-                key={index}
+                key={chat.id}
                 className={`container ${chat.name === name ? "me" : "you"}`}
+                onClick={() => handleClick(chat.id)}
               >
                 <div
                   className={`chatbox ${chat.name === name ? "me" : "you"}`}

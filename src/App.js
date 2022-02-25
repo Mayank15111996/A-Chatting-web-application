@@ -17,7 +17,7 @@ import DeleteDialog from "./Components/DeleteDialog";
 
 const App = () => {
   const db = getDatabase();
-  const [name, setName] = useState("Mayank");
+  const [name, setName] = useState("");
   const [chats, setChats] = useState([]);
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");

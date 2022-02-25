@@ -25,7 +25,7 @@ const App = () => {
   const [yourName, setYourName] = useState("");
   const [enteredName, setEnteredName] = useState("");
   const [openDelete, setOpenDelete] = useState(false);
-  const [deleteId, setDeleteId] = useState("");
+  const [deleteId, setDeleteId] = useState([]);
 
   const nameListRef = ref(db, "names");
 
@@ -72,15 +72,23 @@ const App = () => {
     setMessage("");
   };
 
-  const handleDeleteOpen = (id) => {
-    setDeleteId(id);
+  const handleDeleteOpen = (listOfIds) => {
     setOpenDelete(true);
+    setDeleteId(listOfIds);
   };
 
   const handleDelete = () => {
     if (!deleteId) return;
-    remove(ref(db, "chats/" + deleteId));
-    setChats(chats.filter((val) => val.id !== deleteId));
+    deleteId.forEach((id) => {
+      remove(ref(db, "chats/" + id));
+    });
+    setChats(
+      chats.filter((val) => {
+        deleteId.find((id) => {
+          return id !== val;
+        });
+      })
+    );
     setOpenDelete(false);
   };
 

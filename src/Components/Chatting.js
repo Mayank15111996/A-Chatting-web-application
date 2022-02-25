@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TypeField from "./TypeField";
 
 import NavBar from "./NavBar";
@@ -13,13 +13,35 @@ const Chatting = ({
   setMessage,
   handleDeleteOpen,
 }) => {
+  const [listOfIds, setListOfIds] = useState([]);
+  const [change, setChange] = useState(0);
+
+  useEffect(() => {
+    setChange(listOfIds.length);
+  }, [chats]);
+
   const handleClick = (id) => {
-    handleDeleteOpen(id);
+    if (document.getElementById(id).classList.contains("selected")) {
+      setChange(change - 1);
+      setListOfIds(listOfIds.filter((currentId) => currentId !== id));
+      console.log(listOfIds.length);
+      document.getElementById(id).classList.remove("selected");
+    } else {
+      setChange(change + 1);
+      console.log(listOfIds.length);
+      setListOfIds([...listOfIds, id]);
+      document.getElementById(id).classList.add("selected");
+    }
   };
 
   return (
     <>
-      <NavBar yourName={yourName} setYourName={setYourName} />
+      <NavBar
+        yourName={yourName}
+        setYourName={setYourName}
+        change={change}
+        handleDeleteOpen={() => handleDeleteOpen(listOfIds)}
+      />
       <div id="chat" className="chat-container">
         {chats
           .filter(
@@ -32,6 +54,7 @@ const Chatting = ({
               <div
                 key={chat.id}
                 className={`container ${chat.name === name ? "me" : "you"}`}
+                id={chat.id}
                 onClick={() => handleClick(chat.id)}
               >
                 <div

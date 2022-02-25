@@ -54,3 +54,7 @@
 body {
   background-color: #0f181e;
 }
+
+.selected {
+  background-color: rgb(80, 179, 141);
+}

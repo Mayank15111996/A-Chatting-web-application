@@ -11,12 +11,22 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
-import { ArrowBack, Call, VideocamRounded } from "@material-ui/icons";
+import {
+  ArrowBack,
+  Call,
+  Delete,
+  Forward,
+  ForwardOutlined,
+  ForwardTwoTone,
+  Star,
+  VideocamRounded,
+} from "@material-ui/icons";
 import { Avatar } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
+    minHeight: theme.spacing(8.1),
   },
   sectionDesktop: {
     [theme.breakpoints.up("md")]: {
@@ -34,7 +44,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PrimarySearchAppBar({ yourName, setYourName }) {
+export default function PrimarySearchAppBar({
+  yourName,
+  setYourName,
+  change,
+  handleDeleteOpen,
+}) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -132,22 +147,45 @@ export default function PrimarySearchAppBar({ yourName, setYourName }) {
             onClick={handleBack}
           >
             <ArrowBack className={classes.arrow} />
-            <Avatar
-              alt={`${yourName}`}
-              src={`/static/images/avatar/${yourName}.jpg`}
-            />
+            {!change && (
+              <Avatar
+                alt={`${yourName}`}
+                src={`/static/images/avatar/${yourName}.jpg`}
+              />
+            )}
           </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
-            {yourName}
-          </Typography>
+          {!change && (
+            <Typography className={classes.title} variant="h6" noWrap>
+              {yourName}
+            </Typography>
+          )}
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton color="inherit">
-              <VideocamRounded />
-            </IconButton>
-            <IconButton color="inherit">
-              <Call />
-            </IconButton>
+            {change ? (
+              <>
+                <IconButton color="inherit">
+                  <Star />
+                </IconButton>
+                <IconButton color="inherit">
+                  <ForwardOutlined style={{ transform: "rotate(180deg)" }} />
+                </IconButton>
+                <IconButton color="inherit" onClick={() => handleDeleteOpen()}>
+                  <Delete />
+                </IconButton>
+                <IconButton color="inherit">
+                  <ForwardOutlined />
+                </IconButton>
+              </>
+            ) : (
+              <>
+                <IconButton color="inherit">
+                  <VideocamRounded />
+                </IconButton>
+                <IconButton color="inherit">
+                  <Call />
+                </IconButton>
+              </>
+            )}
           </div>
           <div className={classes.sectionMobile}>
             <IconButton onClick={handleMobileMenuOpen} color="inherit">

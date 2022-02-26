@@ -13,6 +13,7 @@ import {
 } from "firebase/database";
 import NameDialog from "./Components/NameDialog";
 import DeleteDialog from "./Components/DeleteDialog";
+import sound from "./audio_files/Tick_Sound.mp3";
 
 const App = () => {
   const db = getDatabase();
@@ -25,6 +26,8 @@ const App = () => {
   const [enteredName, setEnteredName] = useState("");
   const [openDelete, setOpenDelete] = useState(false);
   const [deleteId, setDeleteId] = useState([]);
+
+  const audio = new Audio(sound);
 
   const nameListRef = ref(db, "names");
 
@@ -58,7 +61,6 @@ const App = () => {
   };
 
   const sendMessage = () => {
-    // Create a new post reference with an auto-generated id
     const id = getUniqueId();
     const chatListRef = ref(db, "chats/" + id);
     set(chatListRef, {
@@ -69,6 +71,8 @@ const App = () => {
       id,
     });
     setMessage("");
+    console.log("Successfully sent!");
+    audio.play();
   };
 
   const handleDeleteOpen = (listOfIds) => {

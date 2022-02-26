@@ -56,7 +56,8 @@ export default function CustomizedInputBase({
           placeholder="Type your message"
           inputProps={{ "aria-label": "search google maps" }}
           value={message}
-          onInput={(e) => setMessage(e.target.value)}
+          onChange={(e) => setMessage(e.target.value)}
+          id="myInput"
         />
       </Paper>
       <Fab

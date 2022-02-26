@@ -70,6 +70,11 @@ const App = () => {
   };
 
   const sendMessage = () => {
+    // THIS STATEMENT IS VERY IMPORTATNT AS IT TAKE
+    // THE FOCUS BACK TO THE INPUT ELEMENT WHENEVER
+    // THE USER CLICK ON THE BUTTON TO SEND THE MESSAGE.
+    document.getElementById("myInput").focus();
+
     const id = getUniqueId();
     const chatListRef = ref(db, "chats/" + id);
     const time = getTime();

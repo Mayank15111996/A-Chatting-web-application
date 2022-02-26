@@ -29,7 +29,9 @@ const App = () => {
   const [enteredName, setEnteredName] = useState("");
   const [openDelete, setOpenDelete] = useState(false);
   const [deleteId, setDeleteId] = useState([]);
-  const [sent, setSent] = useState(false);
+
+  const [listOfIds, setListOfIds] = useState([]);
+  const [change, setChange] = useState(0);
 
   const audio = new Audio(sound);
 
@@ -99,7 +101,6 @@ const App = () => {
       audio.play();
     }, 400);
     console.log("Successfully update!");
-    setSent(true);
   };
 
   const handleDeleteOpen = (listOfIds) => {
@@ -133,6 +134,7 @@ const App = () => {
     console.log("Successfully Deleted!");
     setDeleteId([]);
     setOpenDelete(false);
+    setChange(0);
   };
 
   const closeDelete = () => {
@@ -154,43 +156,8 @@ const App = () => {
     setOpen(false);
   };
 
-  // useEffect(() => {
-  //   get(child(ref(db), "chats"))
-  //     .then((snapshot) => {
-  //       if (snapshot.exists()) {
-  //         setChats((chats) => [...chats, snapshot.val()]);
-  //       } else {
-  //         console.log("No data found!");
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  //   get(child(ref(db), "names"))
-  //     .then((snapshot) => {
-  //       if (snapshot.exists()) {
-  //         setNameList((nameList) => [...nameList, snapshot.val()]);
-  //       } else {
-  //         console.log("No data found!");
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }, []);
-
   useEffect(() => {
     onChildAdded(ref(db, "chats"), (data) => {
-      // console.log(data.val());
-      // update(ref(db, "chats/" + name), {
-      //   id: data.val().id,
-      //   message: data.val().message,
-      //   name: data.val().name,
-      //   sent: true,
-      //   sentTo: data.val().sentTo,
-      //   timing: data.val().timing,
-      // });
-      // console.log(data.val());
       setChats((chats) => [...chats, data.val()]);
       console.log("success!");
       setTimeout(() => {
@@ -208,6 +175,16 @@ const App = () => {
 
   const handleName = (name) => {
     setYourName(name);
+  };
+
+  const updateChange = (task) => {
+    task === "increase" ? setChange(change + 1) : setChange(change - 1);
+  };
+
+  const updateListOfIds = (id, task) => {
+    task === "add"
+      ? setListOfIds([...listOfIds, id])
+      : setListOfIds(listOfIds.filter((currentId) => currentId !== id));
   };
 
   console.log(chats);
@@ -251,7 +228,10 @@ const App = () => {
             message={message}
             setMessage={setMessage}
             handleDeleteOpen={handleDeleteOpen}
-            sent={sent}
+            change={change}
+            listOfIds={listOfIds}
+            updateChange={updateChange}
+            updateListOfIds={updateListOfIds}
           />
           {openDelete && (
             <DeleteDialog

@@ -13,27 +13,26 @@ const Chatting = ({
   message,
   setMessage,
   handleDeleteOpen,
-  sent,
+  change,
+  listOfIds,
+  updateChange,
+  updateListOfIds,
 }) => {
-  const [listOfIds, setListOfIds] = useState([]);
-  const [change, setChange] = useState(0);
-
   const handleClick = (id) => {
     if (document.getElementById(id).classList.contains("selected")) {
-      setListOfIds(listOfIds.filter((currentId) => currentId !== id));
-      setChange(change - 1);
+      updateChange("decrease");
+      updateListOfIds(id, "remove");
       console.log(change);
       document.getElementById(id).classList.remove("selected");
     } else {
-      setListOfIds([...listOfIds, id]);
-      setChange(change + 1);
+      updateChange("increase");
+      updateListOfIds(id, "add");
       console.log(change);
       document.getElementById(id).classList.add("selected");
     }
   };
 
   const handleClick2 = () => {
-    setChange(change - listOfIds.length);
     handleDeleteOpen(listOfIds);
   };
 

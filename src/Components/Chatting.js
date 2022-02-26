@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import TypeField from "./TypeField";
 
 import NavBar from "./NavBar";
@@ -15,10 +15,6 @@ const Chatting = ({
 }) => {
   const [listOfIds, setListOfIds] = useState([]);
   const [change, setChange] = useState(0);
-
-  // useEffect(() => {
-  //   setChange(listOfIds.length);
-  // }, [chats.length]);
 
   const handleClick = (id) => {
     if (document.getElementById(id).classList.contains("selected")) {

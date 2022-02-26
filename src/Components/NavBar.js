@@ -15,9 +15,7 @@ import {
   ArrowBack,
   Call,
   Delete,
-  Forward,
   ForwardOutlined,
-  ForwardTwoTone,
   Star,
   VideocamRounded,
 } from "@material-ui/icons";

@@ -10,7 +10,6 @@ import {
   set,
   onChildAdded,
   remove,
-  onChildRemoved,
 } from "firebase/database";
 import NameDialog from "./Components/NameDialog";
 import DeleteDialog from "./Components/DeleteDialog";

@@ -10,8 +10,6 @@ import {
   set,
   onChildAdded,
   remove,
-  get,
-  child,
   update,
 } from "firebase/database";
 import NameDialog from "./Components/NameDialog";
@@ -20,15 +18,14 @@ import sound from "./audio_files/Tick_Sound.mp3";
 
 const App = () => {
   const db = getDatabase();
-  const [name, setName] = useState("Mayank");
+  const [name, setName] = useState("");
   const [chats, setChats] = useState([]);
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [nameList, setNameList] = useState([]);
-  const [yourName, setYourName] = useState("Nikita");
+  const [yourName, setYourName] = useState("");
   const [enteredName, setEnteredName] = useState("");
   const [openDelete, setOpenDelete] = useState(false);
-  const [deleteId, setDeleteId] = useState([]);
 
   const [listOfIds, setListOfIds] = useState([]);
   const [change, setChange] = useState(0);
@@ -103,9 +100,8 @@ const App = () => {
     console.log("Successfully update!");
   };
 
-  const handleDeleteOpen = (listOfIds) => {
+  const handleDeleteOpen = () => {
     setOpenDelete(true);
-    setDeleteId(listOfIds);
   };
 
   const updateChats = (ids, chats) => {
@@ -126,15 +122,15 @@ const App = () => {
   };
 
   const handleDelete = () => {
-    if (!deleteId) return;
-    deleteId.forEach((id) => {
+    if (!listOfIds) return;
+    listOfIds.forEach((id) => {
       remove(ref(db, "chats/" + id));
     });
-    setChats(updateChats(deleteId, chats));
+    setChats(updateChats(listOfIds, chats));
     console.log("Successfully Deleted!");
-    setDeleteId([]);
     setOpenDelete(false);
     setChange(0);
+    setListOfIds([]);
   };
 
   const closeDelete = () => {
@@ -186,8 +182,6 @@ const App = () => {
       ? setListOfIds([...listOfIds, id])
       : setListOfIds(listOfIds.filter((currentId) => currentId !== id));
   };
-
-  console.log(chats);
 
   return (
     <div className="body">

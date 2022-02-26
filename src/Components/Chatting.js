@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import TypeField from "./TypeField";
 
 import NavBar from "./NavBar";

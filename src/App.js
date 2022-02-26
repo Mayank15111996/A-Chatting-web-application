@@ -10,6 +10,9 @@ import {
   set,
   onChildAdded,
   remove,
+  get,
+  child,
+  update,
 } from "firebase/database";
 import NameDialog from "./Components/NameDialog";
 import DeleteDialog from "./Components/DeleteDialog";
@@ -17,15 +20,16 @@ import sound from "./audio_files/Tick_Sound.mp3";
 
 const App = () => {
   const db = getDatabase();
-  const [name, setName] = useState("");
+  const [name, setName] = useState("Mayank");
   const [chats, setChats] = useState([]);
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [nameList, setNameList] = useState([]);
-  const [yourName, setYourName] = useState("");
+  const [yourName, setYourName] = useState("Nikita");
   const [enteredName, setEnteredName] = useState("");
   const [openDelete, setOpenDelete] = useState(false);
   const [deleteId, setDeleteId] = useState([]);
+  const [sent, setSent] = useState(false);
 
   const audio = new Audio(sound);
 
@@ -60,19 +64,42 @@ const App = () => {
     );
   };
 
+  const updateTheChats = (id) => {
+    setChats((chats) =>
+      chats.map((item) => (item.id === id ? { ...item, sent: true } : item))
+    );
+  };
+
   const sendMessage = () => {
     const id = getUniqueId();
     const chatListRef = ref(db, "chats/" + id);
+    const time = getTime();
     set(chatListRef, {
       name,
       sentTo: yourName,
       message: message,
-      timing: getTime(),
+      timing: time,
       id,
+      sent: false,
     });
     setMessage("");
     console.log("Successfully sent!");
-    audio.play();
+    setTimeout(() => {
+      const updates = {};
+      updates["chats/" + id] = {
+        name,
+        sentTo: yourName,
+        message: message,
+        timing: time,
+        id,
+        sent: true,
+      };
+      update(ref(db), updates);
+      updateTheChats(id, time);
+      audio.play();
+    }, 400);
+    console.log("Successfully update!");
+    setSent(true);
   };
 
   const handleDeleteOpen = (listOfIds) => {
@@ -127,9 +154,45 @@ const App = () => {
     setOpen(false);
   };
 
+  // useEffect(() => {
+  //   get(child(ref(db), "chats"))
+  //     .then((snapshot) => {
+  //       if (snapshot.exists()) {
+  //         setChats((chats) => [...chats, snapshot.val()]);
+  //       } else {
+  //         console.log("No data found!");
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  //   get(child(ref(db), "names"))
+  //     .then((snapshot) => {
+  //       if (snapshot.exists()) {
+  //         setNameList((nameList) => [...nameList, snapshot.val()]);
+  //       } else {
+  //         console.log("No data found!");
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }, []);
+
   useEffect(() => {
     onChildAdded(ref(db, "chats"), (data) => {
+      // console.log(data.val());
+      // update(ref(db, "chats/" + name), {
+      //   id: data.val().id,
+      //   message: data.val().message,
+      //   name: data.val().name,
+      //   sent: true,
+      //   sentTo: data.val().sentTo,
+      //   timing: data.val().timing,
+      // });
+      // console.log(data.val());
       setChats((chats) => [...chats, data.val()]);
+      console.log("success!");
       setTimeout(() => {
         updateHeight();
       }, 100);
@@ -137,7 +200,6 @@ const App = () => {
     onChildAdded(nameListRef, (data) => {
       setNameList((nameList) => [...nameList, data.val()]);
     });
-    console.log("Successfully added!");
   }, []);
 
   const contactList = nameList
@@ -147,6 +209,8 @@ const App = () => {
   const handleName = (name) => {
     setYourName(name);
   };
+
+  console.log(chats);
 
   return (
     <div className="body">
@@ -187,6 +251,7 @@ const App = () => {
             message={message}
             setMessage={setMessage}
             handleDeleteOpen={handleDeleteOpen}
+            sent={sent}
           />
           {openDelete && (
             <DeleteDialog

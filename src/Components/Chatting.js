@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import TypeField from "./TypeField";
 
 import NavBar from "./NavBar";
+import { Done, Schedule } from "@material-ui/icons";
 
 const Chatting = ({
   name,
@@ -12,6 +13,7 @@ const Chatting = ({
   message,
   setMessage,
   handleDeleteOpen,
+  sent,
 }) => {
   const [listOfIds, setListOfIds] = useState([]);
   const [change, setChange] = useState(0);
@@ -63,7 +65,16 @@ const Chatting = ({
                   style={{ position: "relative", minWidth: "50px" }}
                 >
                   <span className="message">{chat.message}</span>
-                  <div className="timing">{chat.timing}</div>
+                  <div className="timing">
+                    <div className="time">{chat.timing}</div>
+                    <div className="tick">
+                      {chat.sent ? (
+                        <Done style={{ transform: "scale(0.7)" }} />
+                      ) : (
+                        <Schedule style={{ transform: "scale(0.65)" }} />
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             );

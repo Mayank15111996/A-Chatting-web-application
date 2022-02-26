@@ -18,12 +18,12 @@ import sound from "./audio_files/Tick_Sound.mp3";
 
 const App = () => {
   const db = getDatabase();
-  const [name, setName] = useState("");
+  const [name, setName] = useState("Mayank");
   const [chats, setChats] = useState([]);
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [nameList, setNameList] = useState([]);
-  const [yourName, setYourName] = useState("");
+  const [yourName, setYourName] = useState("Nikita");
   const [enteredName, setEnteredName] = useState("");
   const [openDelete, setOpenDelete] = useState(false);
 

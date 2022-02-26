@@ -85,6 +85,9 @@ const useStyles = makeStyles((theme) => ({
   swipeable: {
     marginTop: theme.spacing(13),
   },
+  contactList: {
+    minHeight: "82vh",
+  },
 }));
 
 const tabStyle = {
@@ -185,19 +188,31 @@ export default function FrontPage({
         className={classes.swipeable}
       >
         <TabPanel value={value} index={0} dir={theme.direction}>
-          {contactList.map((val) => {
-            return <ContactList key={val} name={val} handleName={handleName} />;
-          })}
+          <div className={classes.contactList}>
+            {contactList.map((val) => {
+              return (
+                <ContactList key={val} name={val} handleName={handleName} />
+              );
+            })}
+          </div>
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
-          {contactList.map((val) => {
-            return <ContactList key={val} name={val} handleName={handleName} />;
-          })}
+          <div className={classes.contactList}>
+            {contactList.map((val) => {
+              return (
+                <ContactList key={val} name={val} handleName={handleName} />
+              );
+            })}
+          </div>
         </TabPanel>
         <TabPanel value={value} index={2} dir={theme.direction}>
-          {contactList.map((val) => {
-            return <ContactList key={val} name={val} handleName={handleName} />;
-          })}
+          <div className={classes.contactList}>
+            {contactList.map((val) => {
+              return (
+                <ContactList key={val} name={val} handleName={handleName} />
+              );
+            })}
+          </div>
         </TabPanel>
       </SwipeableViews>
       {fabs.map((fab, index) => (

@@ -33,6 +33,13 @@ export default function CustomizedInputBase({ setName }) {
     setName(user1);
   };
 
+  const handleSetConfirm = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      setName(user1);
+    }
+  };
+
   return (
     <Paper component="form" className={classes.root}>
       <InputBase
@@ -42,6 +49,8 @@ export default function CustomizedInputBase({ setName }) {
         value={user1}
         name="myName"
         onInput={(e) => setUser1(e.target.value)}
+        onKeyDown={handleSetConfirm}
+        autoFocus
       />
       <Divider className={classes.divider} orientation="vertical" />
       <Button variant="contained" color="primary" onClick={handleConfirm}>

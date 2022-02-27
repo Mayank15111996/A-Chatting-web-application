@@ -49,7 +49,6 @@ export default function CustomizedInputBase({
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      console.log(e);
       e.preventDefault();
       sendMessage();
     }

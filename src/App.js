@@ -8,17 +8,18 @@ import {
   ref,
   push,
   set,
-  onChildAdded,
   remove,
   update,
+  onValue,
 } from "firebase/database";
 import NameDialog from "./Components/NameDialog";
 import DeleteDialog from "./Components/DeleteDialog";
 import sound from "./audio_files/Tick_Sound.mp3";
+import ContactsLoading from "./Components/ContactsLoading";
 
 const App = () => {
   const db = getDatabase();
-  const [name, setName] = useState("");
+  const [name, setName] = useState("Mayank");
   const [chats, setChats] = useState([]);
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
@@ -29,10 +30,10 @@ const App = () => {
 
   const [listOfIds, setListOfIds] = useState([]);
   const [change, setChange] = useState(0);
+  const [chatsLoading, setChatsLoading] = useState(true);
+  const [contactsLoading, setContactsLoading] = useState(true);
 
   const audio = new Audio(sound);
-
-  const nameListRef = ref(db, "names");
 
   const updateHeight = () => {
     const element = document.getElementById("chat");
@@ -51,22 +52,6 @@ const App = () => {
     return hrs + ":" + min;
   };
 
-  const getUniqueId = () => {
-    return (
-      new Date().getFullYear() +
-      ":" +
-      new Date().getMonth() +
-      ":" +
-      new Date().getDate() +
-      ":" +
-      new Date().getHours() +
-      ":" +
-      new Date().getMinutes() +
-      ":" +
-      new Date().getSeconds()
-    );
-  };
-
   const updateTheChats = (id) => {
     setChats((chats) =>
       chats.map((item) => (item.id === id ? { ...item, sent: true } : item))
@@ -79,17 +64,21 @@ const App = () => {
     // THE USER CLICK ON THE BUTTON TO SEND THE MESSAGE.
     document.getElementById("myInput").focus();
 
-    const id = getUniqueId();
-    const chatListRef = ref(db, "chats/" + id);
+    const id = push(ref(db, "chats")).key;
     const time = getTime();
-    set(chatListRef, {
+    const newData = {
       name,
       sentTo: yourName,
       message: message,
       timing: time,
       id,
       sent: false,
-    });
+    };
+    setChats((chats) => [...chats, newData]);
+    set(ref(db, "chats/" + id), newData);
+    setTimeout(() => {
+      updateHeight();
+    }, 100);
     setMessage("");
     console.log("Successfully sent!");
     setTimeout(() => {
@@ -155,23 +144,45 @@ const App = () => {
   };
 
   const handleAddName = () => {
-    const nameRef = push(nameListRef);
+    const nameRef = push(ref(db, "names"));
     set(nameRef, { enteredName, whoIsEntering: name });
     setEnteredName("");
+    setNameList((nameList) => [
+      ...nameList,
+      { enteredName, whoIsEntering: name },
+    ]);
     setOpen(false);
   };
 
   useEffect(() => {
-    onChildAdded(ref(db, "chats"), (data) => {
-      setChats((chats) => [...chats, data.val()]);
-      console.log("success!");
-      setTimeout(() => {
-        updateHeight();
-      }, 100);
-    });
-    onChildAdded(nameListRef, (data) => {
-      setNameList((nameList) => [...nameList, data.val()]);
-    });
+    onValue(
+      ref(db, "names"),
+      (snapshot) => {
+        snapshot.forEach((childSnapshot) => {
+          const childKey = childSnapshot.key;
+          const childData = childSnapshot.val();
+          setNameList((nameList) => [...nameList, childData]);
+        });
+        setContactsLoading(false);
+      },
+      {
+        onlyOnce: true,
+      }
+    );
+    onValue(
+      ref(db, "chats"),
+      (snapshot) => {
+        snapshot.forEach((childSnapshot) => {
+          const childKey = childSnapshot.key;
+          const childData = childSnapshot.val();
+          setChats((chats) => [...chats, childData]);
+        });
+        setChatsLoading(false);
+      },
+      {
+        onlyOnce: true,
+      }
+    );
   }, []);
 
   const contactList = nameList
@@ -207,6 +218,7 @@ const App = () => {
               handleName={handleName}
               handleAdd={handleAdd}
             />
+            <ContactsLoading contactsLoading={contactsLoading} />
             {open && (
               <NameDialog
                 open={open}
@@ -236,6 +248,8 @@ const App = () => {
             updateChange={updateChange}
             updateListOfIds={updateListOfIds}
             updateHeight={updateHeight}
+            setChats={setChats}
+            chatsLoading={chatsLoading}
           />
           {openDelete && (
             <DeleteDialog

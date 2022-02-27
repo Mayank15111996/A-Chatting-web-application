@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TypeField from "./TypeField";
 
 import NavBar from "./NavBar";
 import { Done, Schedule } from "@material-ui/icons";
+import ChatsLoading from "./ChatsLoading";
 
 const Chatting = ({
   name,
@@ -18,6 +19,7 @@ const Chatting = ({
   updateChange,
   updateListOfIds,
   updateHeight,
+  chatsLoading,
 }) => {
   const handleClick = (id) => {
     if (document.getElementById(id).classList.contains("selected")) {
@@ -89,6 +91,7 @@ const Chatting = ({
           setYourName={setYourName}
           updateHeight={updateHeight}
         />
+        <ChatsLoading chatsLoading={chatsLoading} />
       </div>
     </>
   );

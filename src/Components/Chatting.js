@@ -17,6 +17,7 @@ const Chatting = ({
   listOfIds,
   updateChange,
   updateListOfIds,
+  updateHeight,
 }) => {
   const handleClick = (id) => {
     if (document.getElementById(id).classList.contains("selected")) {
@@ -79,12 +80,14 @@ const Chatting = ({
             );
           })}
       </div>
-      <div className="type-field">
+      <div className="type-field" id="myTypeField">
         <TypeField
           message={message}
           setMessage={setMessage}
           sendMessage={sendMessage}
           style={{ backgroundColor: "red" }}
+          setYourName={setYourName}
+          updateHeight={updateHeight}
         />
       </div>
     </>

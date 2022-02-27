@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import InputBase from "@material-ui/core/InputBase";
-import { Attachment, Send } from "@material-ui/icons";
+import { Attachment, ExpandMore, Send } from "@material-ui/icons";
 import Fab from "@material-ui/core/Fab";
 
 const useStyles = makeStyles((theme) => ({
@@ -42,18 +42,59 @@ export default function CustomizedInputBase({
   message,
   setMessage,
   sendMessage,
+  setYourName,
+  updateHeight,
 }) {
   const classes = useStyles();
   const [image, setImage] = useState({ selectedFile: null });
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      console.log(e);
+      e.preventDefault();
+      sendMessage();
+    }
+  };
 
   const handleClick = (e) => {
     e.preventDefault();
     sendMessage();
   };
 
-  useEffect(() => {
-    console.log(image);
-  }, [image]);
+  const handleKeyboardOpen = (e) => {
+    e.preventDefault();
+    document.getElementById("chat").style.height = "59vh";
+    updateHeight();
+    if (document.getElementById("icon").style.transform === "") {
+      document.getElementById("icon").style.transform = "rotate(180deg)";
+    } else {
+      document.getElementById("icon").style.transform = "";
+    }
+  };
+
+  const handleKeyboardClose = (e) => {
+    e.stopPropagation();
+    if (document.getElementById("icon").style.transform === "") {
+      document.getElementById("icon").style.transform = "rotate(180deg)";
+    } else {
+      document.getElementById("icon").style.transform = "";
+    }
+    document.getElementById("chat").style.height = "76vh";
+  };
+
+  const handleBack = () => {
+    setYourName("");
+  };
+
+  const handleFocus = (e) => {
+    document.getElementById("icon").style.marginTop = "4vh";
+    document.getElementById("attachment").style.marginTop = "3.9vh";
+  };
+
+  const handleBlur = (e) => {
+    document.getElementById("icon").style.marginTop = "2.6vh";
+    document.getElementById("attachment").style.marginTop = "2.5vh";
+  };
 
   return (
     <div className={classes.container}>
@@ -65,15 +106,39 @@ export default function CustomizedInputBase({
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           id="myInput"
+          onKeyDown={handleKeyDown}
+          onClick={(e) => handleKeyboardOpen(e)}
+          onFocus={(e) => handleFocus(e)}
+          autoComplete="off"
+          onBlur={(e) => handleBlur(e)}
         />
       </Paper>
       <div
         style={{
           position: "absolute",
-          marginLeft: "63vw",
+          marginLeft: "59vw",
+          marginTop: "2.6vh",
+          color: "#80909A",
+          transform: "rotate(180deg)",
+          cursor: "pointer",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        id="icon"
+        onClick={(e) => handleKeyboardClose(e)}
+        onDoubleClick={() => handleBack()}
+      >
+        <ExpandMore />
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          marginLeft: "70vw",
           marginTop: "2.5vh",
           color: "#80909A",
         }}
+        id="attachment"
       >
         <label htmlFor="file-input">
           <Attachment style={{ cursor: "pointer" }} />

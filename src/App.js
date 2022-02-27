@@ -18,12 +18,12 @@ import sound from "./audio_files/Tick_Sound.mp3";
 
 const App = () => {
   const db = getDatabase();
-  const [name, setName] = useState("Mayank");
+  const [name, setName] = useState("");
   const [chats, setChats] = useState([]);
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [nameList, setNameList] = useState([]);
-  const [yourName, setYourName] = useState("Nikita");
+  const [yourName, setYourName] = useState("");
   const [enteredName, setEnteredName] = useState("");
   const [openDelete, setOpenDelete] = useState(false);
 
@@ -38,6 +38,10 @@ const App = () => {
     const element = document.getElementById("chat");
     if (element) element.scrollTop = element.scrollHeight;
   };
+
+  useEffect(() => {
+    updateHeight();
+  }, [yourName]);
 
   const getTime = () => {
     let hrs = new Date().getHours();
@@ -231,6 +235,7 @@ const App = () => {
             listOfIds={listOfIds}
             updateChange={updateChange}
             updateListOfIds={updateListOfIds}
+            updateHeight={updateHeight}
           />
           {openDelete && (
             <DeleteDialog

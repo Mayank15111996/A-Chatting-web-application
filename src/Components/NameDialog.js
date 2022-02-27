@@ -31,6 +31,7 @@ export default function NameDialog({
             fullWidth
             value={enteredName}
             onChange={handleChange}
+            autoComplete="off"
           />
         </DialogContent>
         <DialogActions>

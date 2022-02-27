@@ -109,7 +109,7 @@ const App = () => {
     setOpenDelete(true);
   };
 
-  const updateChats = (ids, chats) => {
+  const updateChats = (ids) => {
     let answer = [];
     for (let i = 0; i < chats.length; i++) {
       let found = false;
@@ -131,7 +131,7 @@ const App = () => {
     listOfIds.forEach((id) => {
       remove(ref(db, "chats/" + id));
     });
-    setChats(updateChats(listOfIds, chats));
+    setChats(updateChats(listOfIds));
     console.log("Successfully Deleted!");
     setOpenDelete(false);
     setChange(0);
@@ -258,6 +258,7 @@ const App = () => {
             updateHeight={updateHeight}
             setChats={setChats}
             chatsLoading={chatsLoading}
+            updateChats={updateChats}
           />
           {openDelete && (
             <DeleteDialog

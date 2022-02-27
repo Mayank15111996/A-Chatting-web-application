@@ -20,6 +20,7 @@ import {
   VideocamRounded,
 } from "@material-ui/icons";
 import { Avatar } from "@material-ui/core";
+import { getDatabase, onValue, remove, ref } from "firebase/database";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -47,6 +48,9 @@ export default function PrimarySearchAppBar({
   setYourName,
   change,
   handleDeleteOpen,
+  name,
+  setChats,
+  updateChats,
 }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -70,6 +74,32 @@ export default function PrimarySearchAppBar({
 
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
+  };
+
+  const handleDeleteAll = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // e.stopImmediatePropagation();
+    onValue(
+      ref(getDatabase(), "chats"),
+      (snapshot) => {
+        let toDelete = [];
+        snapshot.forEach((childSnapshot) => {
+          if (
+            childSnapshot.val().name === name &&
+            childSnapshot.val().sentTo === yourName
+          ) {
+            toDelete.push(childSnapshot.key);
+            remove(ref(getDatabase(), `chats/${childSnapshot.key}`));
+          }
+        });
+        setChats(updateChats(toDelete));
+      },
+      {
+        onlyOnce: true,
+      }
+    );
+    handleMenuClose();
   };
 
   const menuId = "primary-search-account-menu";
@@ -125,6 +155,14 @@ export default function PrimarySearchAppBar({
           <AccountCircle />
         </IconButton>
         <p>Profile</p>
+      </MenuItem>
+      <MenuItem onClick={(e) => handleDeleteAll(e)}>
+        <IconButton aria-label="show 4 new mails" color="inherit">
+          <Badge color="secondary">
+            <Delete />
+          </Badge>
+        </IconButton>
+        <p>Delete All</p>
       </MenuItem>
     </Menu>
   );

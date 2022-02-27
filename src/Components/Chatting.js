@@ -20,6 +20,8 @@ const Chatting = ({
   updateListOfIds,
   updateHeight,
   chatsLoading,
+  setChats,
+  updateChats,
 }) => {
   const handleClick = (id) => {
     if (document.getElementById(id).classList.contains("selected")) {
@@ -46,6 +48,9 @@ const Chatting = ({
         setYourName={setYourName}
         change={change}
         handleDeleteOpen={() => handleClick2()}
+        name={name}
+        setChats={setChats}
+        updateChats={updateChats}
       />
       <div id="chat" className="chat-container">
         {chats

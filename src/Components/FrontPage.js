@@ -19,6 +19,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
 import MoreIcon from "@material-ui/icons/MoreVert";
+import ImagesTab from "./ImagesTab";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -108,6 +109,7 @@ export default function FrontPage({
   handleName,
   handleAdd,
   AppName,
+  itemData,
 }) {
   const classes = useStyles();
   const theme = useTheme();
@@ -197,13 +199,7 @@ export default function FrontPage({
           </div>
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
-          <div className={classes.contactList}>
-            {contactList.map((val) => {
-              return (
-                <ContactList key={val} name={val} handleName={handleName} />
-              );
-            })}
-          </div>
+          <ImagesTab itemData={itemData} />
         </TabPanel>
         <TabPanel value={value} index={2} dir={theme.direction}>
           <div className={classes.contactList}>

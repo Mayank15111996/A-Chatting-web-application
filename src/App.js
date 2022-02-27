@@ -32,6 +32,13 @@ const App = () => {
   const [change, setChange] = useState(0);
   const [chatsLoading, setChatsLoading] = useState(true);
   const [contactsLoading, setContactsLoading] = useState(true);
+  const [itemData, setItemData] = useState([
+    {
+      img: "https://firebasestorage.googleapis.com/v0/b/my-react-chat-app-2d9ca.appspot.com/o/images%2Fcnn.png?alt=media&token=005e6608-665e-408a-84c1-4058f4343bdd",
+      title: "Confusion Matrix",
+      author: "Mayank",
+    },
+  ]);
 
   const audio = new Audio(sound);
 
@@ -217,6 +224,7 @@ const App = () => {
               contactList={contactList}
               handleName={handleName}
               handleAdd={handleAdd}
+              itemData={itemData}
             />
             <ContactsLoading contactsLoading={contactsLoading} />
             {open && (

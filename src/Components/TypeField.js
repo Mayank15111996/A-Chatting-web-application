@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import InputBase from "@material-ui/core/InputBase";
-import { Attachment, ExpandMore, Send } from "@material-ui/icons";
+import { ExpandMore, Send } from "@material-ui/icons";
 import Fab from "@material-ui/core/Fab";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -47,7 +46,6 @@ export default function CustomizedInputBase({
   updateHeight,
 }) {
   const classes = useStyles();
-  const [image, setImage] = useState({ selectedFile: null });
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -97,20 +95,6 @@ export default function CustomizedInputBase({
     document.getElementById("attachment").style.marginTop = "2.5vh";
   };
 
-  const handleFileInput = () => {
-    const file = new File(
-      [document.getElementById("input").files[0]],
-      "cnn.png"
-    );
-    const storage = getStorage();
-    const storageRef = ref(storage, "images");
-
-    // 'file' comes from the Blob or File API
-    uploadBytes(storageRef, file).then((snapshot) => {
-      console.log("Uploaded a blob or file!");
-    });
-  };
-
   return (
     <div className={classes.container}>
       <Paper component="form" className={classes.root}>
@@ -146,27 +130,7 @@ export default function CustomizedInputBase({
       >
         <ExpandMore />
       </div>
-      <div
-        style={{
-          position: "absolute",
-          marginLeft: "70vw",
-          marginTop: "2.5vh",
-          color: "#80909A",
-        }}
-        id="attachment"
-      >
-        <label htmlFor="input">
-          <Attachment style={{ cursor: "pointer" }} />
-        </label>
-        <input
-          id="input"
-          type="file"
-          // value={image}
-          style={{ display: "none" }}
-          // onClick={(e) => setImage({ selectedFile: e.target.value })}
-          onChange={() => handleFileInput()}
-        />
-      </div>
+
       <Fab
         color="secondary"
         aria-label="add"

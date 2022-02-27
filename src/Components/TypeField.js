@@ -4,6 +4,7 @@ import Paper from "@material-ui/core/Paper";
 import InputBase from "@material-ui/core/InputBase";
 import { Attachment, ExpandMore, Send } from "@material-ui/icons";
 import Fab from "@material-ui/core/Fab";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -96,6 +97,20 @@ export default function CustomizedInputBase({
     document.getElementById("attachment").style.marginTop = "2.5vh";
   };
 
+  const handleFileInput = () => {
+    const file = new File(
+      [document.getElementById("input").files[0]],
+      "cnn.png"
+    );
+    const storage = getStorage();
+    const storageRef = ref(storage, "images");
+
+    // 'file' comes from the Blob or File API
+    uploadBytes(storageRef, file).then((snapshot) => {
+      console.log("Uploaded a blob or file!");
+    });
+  };
+
   return (
     <div className={classes.container}>
       <Paper component="form" className={classes.root}>
@@ -140,15 +155,16 @@ export default function CustomizedInputBase({
         }}
         id="attachment"
       >
-        <label htmlFor="file-input">
+        <label htmlFor="input">
           <Attachment style={{ cursor: "pointer" }} />
         </label>
         <input
-          id="file-input"
+          id="input"
           type="file"
           // value={image}
           style={{ display: "none" }}
           // onClick={(e) => setImage({ selectedFile: e.target.value })}
+          onChange={() => handleFileInput()}
         />
       </div>
       <Fab

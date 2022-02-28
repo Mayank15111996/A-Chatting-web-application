@@ -11,6 +11,7 @@ import {
   remove,
   update,
   onValue,
+  onChildAdded,
 } from "firebase/database";
 import NameDialog from "./Components/NameDialog";
 import DeleteDialog from "./Components/DeleteDialog";
@@ -30,8 +31,8 @@ const App = () => {
 
   const [listOfIds, setListOfIds] = useState([]);
   const [change, setChange] = useState(0);
-  const [chatsLoading, setChatsLoading] = useState(true);
-  const [contactsLoading, setContactsLoading] = useState(true);
+  const [chatsLoading, setChatsLoading] = useState(false);
+  const [contactsLoading, setContactsLoading] = useState(false);
   const [itemData, setItemData] = useState([
     {
       img: "https://firebasestorage.googleapis.com/v0/b/my-react-chat-app-2d9ca.appspot.com/o/images%2Fcnn.png?alt=media&token=005e6608-665e-408a-84c1-4058f4343bdd",
@@ -81,7 +82,6 @@ const App = () => {
       id,
       sent: false,
     };
-    setChats((chats) => [...chats, newData]);
     set(ref(db, "chats/" + id), newData);
     setTimeout(() => {
       updateHeight();
@@ -162,34 +162,15 @@ const App = () => {
   };
 
   useEffect(() => {
-    onValue(
-      ref(db, "names"),
-      (snapshot) => {
-        snapshot.forEach((childSnapshot) => {
-          const childKey = childSnapshot.key;
-          const childData = childSnapshot.val();
-          setNameList((nameList) => [...nameList, childData]);
-        });
-        setContactsLoading(false);
-      },
-      {
-        onlyOnce: true,
-      }
-    );
-    onValue(
-      ref(db, "chats"),
-      (snapshot) => {
-        snapshot.forEach((childSnapshot) => {
-          const childKey = childSnapshot.key;
-          const childData = childSnapshot.val();
-          setChats((chats) => [...chats, childData]);
-        });
-        setChatsLoading(false);
-      },
-      {
-        onlyOnce: true,
-      }
-    );
+    onChildAdded(ref(db, "chats"), (data) => {
+      setChats((chats) => [...chats, data.val()]);
+      setTimeout(() => {
+        updateHeight();
+      }, 100);
+    });
+    onChildAdded(ref(db, "names"), (data) => {
+      setNameList((nameList) => [...nameList, data.val()]);
+    });
   }, []);
 
   const contactList = nameList
@@ -201,10 +182,18 @@ const App = () => {
   };
 
   const updateChange = (task) => {
+    if (task === "backToZero") {
+      setChange(0);
+      return;
+    }
     task === "increase" ? setChange(change + 1) : setChange(change - 1);
   };
 
   const updateListOfIds = (id, task) => {
+    if (task === "removeAll") {
+      setListOfIds([]);
+      return;
+    }
     task === "add"
       ? setListOfIds([...listOfIds, id])
       : setListOfIds(listOfIds.filter((currentId) => currentId !== id));

@@ -86,58 +86,58 @@ export default function CustomizedInputBase({
 
   const handleFocus = (e) => {
     document.getElementById("icon").style.marginTop = "4vh";
-    document.getElementById("attachment").style.marginTop = "3.9vh";
   };
 
   const handleBlur = (e) => {
     document.getElementById("icon").style.marginTop = "2.6vh";
-    document.getElementById("attachment").style.marginTop = "2.5vh";
   };
 
   return (
-    <div className={classes.container}>
-      <Paper component="form" className={classes.root}>
-        <InputBase
-          className={classes.input}
-          placeholder="Type your message"
-          inputProps={{ "aria-label": "search google maps" }}
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          id="myInput"
-          onKeyDown={handleKeyDown}
-          onClick={(e) => handleKeyboardOpen(e)}
-          onFocus={(e) => handleFocus(e)}
-          autoComplete="off"
-          onBlur={(e) => handleBlur(e)}
-        />
-      </Paper>
-      <div
-        style={{
-          position: "absolute",
-          marginLeft: "59vw",
-          marginTop: "2.6vh",
-          color: "#80909A",
-          transform: "rotate(180deg)",
-          cursor: "pointer",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-        id="icon"
-        onClick={(e) => handleKeyboardClose(e)}
-        onDoubleClick={() => handleBack()}
-      >
-        <ExpandMore />
-      </div>
+    <>
+      <div className={classes.container}>
+        <Paper component="form" className={classes.root}>
+          <InputBase
+            className={classes.input}
+            placeholder="Type your message"
+            inputProps={{ "aria-label": "search google maps" }}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            id="myInput"
+            onKeyDown={handleKeyDown}
+            onClick={(e) => handleKeyboardOpen(e)}
+            onFocus={(e) => handleFocus(e)}
+            autoComplete="off"
+            onBlur={(e) => handleBlur(e)}
+          />
+        </Paper>
+        <div
+          style={{
+            position: "absolute",
+            marginLeft: "59vw",
+            marginTop: "2.6vh",
+            color: "#80909A",
+            transform: "rotate(180deg)",
+            cursor: "pointer",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          id="icon"
+          onClick={(e) => handleKeyboardClose(e)}
+          onDoubleClick={() => handleBack()}
+        >
+          <ExpandMore />
+        </div>
 
-      <Fab
-        color="secondary"
-        aria-label="add"
-        className={classes.fabIcon}
-        onClick={handleClick}
-      >
-        <Send />
-      </Fab>
-    </div>
+        <Fab
+          color="secondary"
+          aria-label="add"
+          className={classes.fabIcon}
+          onClick={handleClick}
+        >
+          <Send />
+        </Fab>
+      </div>
+    </>
   );
 }

@@ -27,12 +27,10 @@ const Chatting = ({
     if (document.getElementById(id).classList.contains("selected")) {
       updateChange("decrease");
       updateListOfIds(id, "remove");
-      console.log(change);
       document.getElementById(id).classList.remove("selected");
     } else {
       updateChange("increase");
       updateListOfIds(id, "add");
-      console.log(change);
       document.getElementById(id).classList.add("selected");
     }
   };
@@ -50,7 +48,10 @@ const Chatting = ({
         handleDeleteOpen={() => handleClick2()}
         name={name}
         setChats={setChats}
+        listOfIds={listOfIds}
         updateChats={updateChats}
+        updateChange={updateChange}
+        updateListOfIds={updateListOfIds}
       />
       <div id="chat" className="chat-container">
         {chats
@@ -74,13 +75,15 @@ const Chatting = ({
                   <span className="message">{chat.message}</span>
                   <div className="timing">
                     <div className="time">{chat.timing}</div>
-                    <div className="tick">
-                      {chat.sent ? (
-                        <Done style={{ transform: "scale(0.7)" }} />
-                      ) : (
-                        <Schedule style={{ transform: "scale(0.65)" }} />
-                      )}
-                    </div>
+                    {chat.name === name ? (
+                      <div className="tick">
+                        {chat.sent ? (
+                          <Done style={{ transform: "scale(0.7)" }} />
+                        ) : (
+                          <Schedule style={{ transform: "scale(0.65)" }} />
+                        )}
+                      </div>
+                    ) : null}
                   </div>
                 </div>
               </div>

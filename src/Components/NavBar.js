@@ -16,6 +16,7 @@ import {
   Call,
   Delete,
   ForwardOutlined,
+  Reply,
   Star,
   VideocamRounded,
 } from "@material-ui/icons";
@@ -51,6 +52,9 @@ export default function PrimarySearchAppBar({
   name,
   setChats,
   updateChats,
+  updateChange,
+  updateListOfIds,
+  listOfIds,
 }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -171,6 +175,21 @@ export default function PrimarySearchAppBar({
     setYourName("");
   };
 
+  const handleRevert = () => {
+    listOfIds.forEach((id) => {
+      document.getElementById(id).classList.remove("selected");
+    });
+    updateChange("backToZero");
+    updateListOfIds("removeAll");
+  };
+
+  const handleReply = () => {
+    document.getElementById("replyBox").innerHTML = "Hello";
+    document.getElementById("replyBox").style.height = "100px";
+    document.getElementById("replyBox").style.width = "200px";
+    document.getElementById("replyBox").style.color = "#ffd";
+  };
+
   return (
     <div className={classes.grow}>
       <AppBar position="static">
@@ -180,7 +199,7 @@ export default function PrimarySearchAppBar({
             className={classes.menuButton}
             color="inherit"
             aria-label="open drawer"
-            onClick={handleBack}
+            onClick={!change ? handleBack : handleRevert}
           >
             <ArrowBack className={classes.arrow} />
             {!change && (
@@ -202,14 +221,14 @@ export default function PrimarySearchAppBar({
                 <IconButton color="inherit">
                   <Star />
                 </IconButton>
-                <IconButton color="inherit">
-                  <ForwardOutlined style={{ transform: "rotate(180deg)" }} />
+                <IconButton color="inherit" onClick={() => handleReply()}>
+                  <Reply />
                 </IconButton>
                 <IconButton color="inherit" onClick={() => handleDeleteOpen()}>
                   <Delete />
                 </IconButton>
                 <IconButton color="inherit">
-                  <ForwardOutlined />
+                  <Reply style={{ transform: "scaleX(-1)" }} />
                 </IconButton>
               </>
             ) : (
